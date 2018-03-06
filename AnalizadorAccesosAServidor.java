@@ -82,7 +82,30 @@ public class AnalizadorAccesosAServidor
      */
     public String paginaWebMasSolicitada() 
     {
-        return "";
+        String paginaWebMasAccesos = null;
+        HashMap<String, Integer> urlsYAccesos = new HashMap<>();
+        int numeroAccesosUrl = 0;
+        if(accesos.size() > 0){
+            for(Acceso urlActual : accesos){
+                String urlAcceso = urlActual.getUrl();
+
+                if(urlsYAccesos.get(urlAcceso) == null){
+                    urlsYAccesos.put(urlAcceso, 1);
+                }
+                else{
+                    urlsYAccesos.replace(urlAcceso, urlsYAccesos.get(urlAcceso) + 1);                    
+                }
+
+                if(urlsYAccesos.get(urlAcceso) > numeroAccesosUrl){
+                    paginaWebMasAccesos = urlAcceso;
+                    numeroAccesosUrl = urlsYAccesos.get(urlAcceso);
+                }
+            }
+        }
+        else{
+            System.out.println("Ocurrio algun error al leer el archivo, no hay datos que procesar.");
+        }
+        return paginaWebMasAccesos;
     }
 
     /**
