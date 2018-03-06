@@ -12,6 +12,9 @@ public class Acceso
     private int dia;
     private int hora;
     private int minutos;
+    private String ip;
+    private String url;
+    private int codigo;
 
     /**
      * Contructor para la clase Acceso
@@ -22,12 +25,16 @@ public class Acceso
     {
         String[] arrayLogs = fecha.split(" ");
 
-        ano = Integer.parseInt(arrayLogs[0]);
-        mes = Integer.parseInt(arrayLogs[1]);
-        dia = Integer.parseInt(arrayLogs[2]);
-        hora = Integer.parseInt(arrayLogs[3]);
-        minutos = Integer.parseInt(arrayLogs[4]);
+        ip = arrayLogs[0];
 
+        ano = Integer.parseInt(arrayLogs[1].substring(1, arrayLogs[1].length()));
+        mes = Integer.parseInt(arrayLogs[2]);
+        dia = Integer.parseInt(arrayLogs[3]);
+        hora = Integer.parseInt(arrayLogs[4]);
+        minutos = Integer.parseInt(arrayLogs[5].substring(0, arrayLogs[5].length() -1));
+
+        url = arrayLogs[6];
+        codigo = Integer.parseInt(arrayLogs[7]);
     }
 
     /**
@@ -78,5 +85,35 @@ public class Acceso
     public int getMinutos()
     {
         return minutos;
+    }
+
+    /**
+     * Devuelve la ip
+     * 
+     * @return la ip como cadena
+     */
+    public String getIp()
+    {
+        return ip;
+    }
+
+    /**
+     * Devuelve la url
+     * 
+     * @return la url como cadena
+     */
+    public String getUrl()
+    {
+        return url;
+    }
+
+    /**
+     * Devuelve el codigo
+     * 
+     * @return el codigo como entero
+     */
+    public int getCodigo()
+    {
+        return codigo;
     }
 }
