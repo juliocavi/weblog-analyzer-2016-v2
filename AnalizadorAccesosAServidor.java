@@ -82,7 +82,30 @@ public class AnalizadorAccesosAServidor
      */
     public String paginaWebMasSolicitada() 
     {
-        return "";
+        String paginaWebMasAccesos = null;
+        HashMap<String, Integer> urlsYAccesos = new HashMap<>();
+        int numeroAccesosUrl = 0;
+        if(accesos.size() > 0){
+            for(Acceso urlActual : accesos){
+                String urlAcceso = urlActual.getUrl();
+
+                if(urlsYAccesos.get(urlAcceso) == null){
+                    urlsYAccesos.put(urlAcceso, 1);
+                }
+                else{
+                    urlsYAccesos.replace(urlAcceso, urlsYAccesos.get(urlAcceso) + 1);                    
+                }
+
+                if(urlsYAccesos.get(urlAcceso) > numeroAccesosUrl){
+                    paginaWebMasAccesos = urlAcceso;
+                    numeroAccesosUrl = urlsYAccesos.get(urlAcceso);
+                }
+            }
+        }
+        else{
+            System.out.println("Ocurrio algun error al leer el archivo, no hay datos que procesar.");
+        }
+        return paginaWebMasAccesos;
     }
 
     /**
@@ -92,6 +115,37 @@ public class AnalizadorAccesosAServidor
      */
     public String clienteConMasAccesosExitosos()
     {
-        return "";
+        String ipMasAccesosExitosos = null;
+        ArrayList<Acceso> ipsBuenas = new ArrayList<>();
+        HashMap<String, Integer> ipsYAccesos = new HashMap<>();
+        int vecesRepetidaIp = 0;
+        int ipMayor = 0;
+        for(Acceso acceso : accesos){
+            if(acceso.getCodigo() < 400){
+                ipsBuenas.add(acceso);
+            }
+        }
+        if(ipsBuenas.size() > 0){
+            for(Acceso ipActual : ipsBuenas){
+                String ipAcceso = ipActual.getIp();
+                if(ipsYAccesos.get(ipAcceso) == null){
+                    ipsYAccesos.put(ipAcceso, 1);
+                }
+                else{
+                    ipsYAccesos.replace(ipAcceso, ipsYAccesos.get(ipAcceso) + 1);
+                }
+                int cuartoOcteto = Integer.parseInt(ipAcceso.split("\\.")[3]);
+                int numeroConexiones = ipsYAccesos.get(ipAcceso);
+                if(numeroConexiones > vecesRepetidaIp || (numeroConexiones == vecesRepetidaIp && cuartoOcteto > ipMayor)){
+                    vecesRepetidaIp = numeroConexiones;
+                    ipMayor = cuartoOcteto;
+                    ipMasAccesosExitosos = ipAcceso;
+                }
+            }
+        }
+        else{
+            System.out.println("Ocurrio algun error al leer el archivo, no hay datos que procesar.");
+        }
+        return ipMasAccesosExitosos;
     }
 }
