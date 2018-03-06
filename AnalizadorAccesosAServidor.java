@@ -115,6 +115,37 @@ public class AnalizadorAccesosAServidor
      */
     public String clienteConMasAccesosExitosos()
     {
-        return "";
+        String ipMasAccesosExitosos = null;
+        ArrayList<Acceso> ipsBuenas = new ArrayList<>();
+        HashMap<String, Integer> ipsYAccesos = new HashMap<>();
+        int vecesRepetidaIp = 0;
+        int ipMayor = 0;
+        for(Acceso acceso : accesos){
+            if(acceso.getCodigo() < 400){
+                ipsBuenas.add(acceso);
+            }
+        }
+        if(ipsBuenas.size() > 0){
+            for(Acceso ipActual : ipsBuenas){
+                String ipAcceso = ipActual.getIp();
+                if(ipsYAccesos.get(ipAcceso) == null){
+                    ipsYAccesos.put(ipAcceso, 1);
+                }
+                else{
+                    ipsYAccesos.replace(ipAcceso, ipsYAccesos.get(ipAcceso) + 1);
+                }
+                int cuartoOcteto = Integer.parseInt(ipAcceso.split("\\.")[3]);
+                int numeroConexiones = ipsYAccesos.get(ipAcceso);
+                if(numeroConexiones > vecesRepetidaIp || (numeroConexiones == vecesRepetidaIp && cuartoOcteto > ipMayor)){
+                    vecesRepetidaIp = numeroConexiones;
+                    ipMayor = cuartoOcteto;
+                    ipMasAccesosExitosos = ipAcceso;
+                }
+            }
+        }
+        else{
+            System.out.println("Ocurrio algun error al leer el archivo, no hay datos que procesar.");
+        }
+        return ipMasAccesosExitosos;
     }
 }
